@@ -19,347 +19,332 @@ import org.jfree.data.general.DefaultPieDataset;
 
 public class ventana extends JFrame {
 
-//creando variables universales
-        JPanel panelInicioSesion, panelNuevoUsuario, panelClientes;
-        JTextField txtUsuario;
-        JPasswordField txtContra;
-        usuario misUsuarios[] = new usuario[10];
-        cliente misClientes[] = new cliente[20];
-        
-        public ventana() {
-            this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-            this.setVisible(true);
-            misUsuarios[0] = new usuario("admin", "123");//usuario 1
-            misUsuarios[1] = new usuario("otro", "321");//usuario 2
-// ------------------------ Clientes en existencia --------------------------
-            misClientes[0] = new cliente("741", "Roberto", 24, 'M');
-            misClientes[1] = new cliente("742", "Carlos", 39, 'M');
-            misClientes[2] = new cliente("743", "Diego", 30, 'M');
-            misClientes[3] = new cliente("744", "Ian", 22, 'M');
-            misClientes[4] = new cliente("745", "Quevin", 22, 'M');
-            misClientes[5] = new cliente("746", "Dayana", 27, 'F');
-        }
+    JPanel panelInicioSesion, panelNewUser, panelClientes;
+    JTextField txtUsuario;
+    JPasswordField txtContra;
+    usuario misUsuarios[] = new usuario[10];
+    cliente misClientes[] = new cliente[100];
+    int contadorClientes = 6;
+    public ventana() {
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
+        misUsuarios[0] = new usuario("Admin", "123");
+        misUsuarios[1] = new usuario("Otro", "321");
+        misClientes[0] = new cliente("741", "Roberto", 24, 'M');
+        misClientes[1] = new cliente("742", "Carlos", 39, 'M');
+        misClientes[2] = new cliente("743", "Diego", 30, 'M');
+        misClientes[3] = new cliente("744", "Ian", 24, 'M');
+        misClientes[4] = new cliente("745", "Quevin", 22, 'M');
+        misClientes[5] = new cliente("746", "Dayana", 27, 'F');
+    }
 
-        public void componentesInicioSesion() {
-            panelInicioSesion = new JPanel(); //------ crear pane
-            panelInicioSesion.setLayout(null);
-            this.getContentPane().add(panelInicioSesion);
-            this.setTitle("Inicio sesion");// Componentes de Iinicio usuario
-            JLabel lblUsuario = new JLabel("Enter your username");// ingresar nombre
-            lblUsuario.setBounds(95, 15, 150, 15);//dimensiones
-            panelInicioSesion.add(lblUsuario);//añadir a la ventana
-            JLabel lblcontra = new JLabel("Enter your password");//ingresar contaseña
-            lblcontra.setBounds(95, 75, 150, 15);
-            panelInicioSesion.add(lblcontra);
-            txtUsuario = new JTextField();
-            txtUsuario.setBounds(250, 15, 150, 25);
-            panelInicioSesion.add(txtUsuario);
-            txtContra = new JPasswordField();
-            txtContra.setBounds(250, 75, 150, 25);
-            panelInicioSesion.add(txtContra);
-            JButton btnIniciar = new JButton("Log in");// ingresar
-            btnIniciar.setBounds(100, 150, 100, 30);
-            panelInicioSesion.add(btnIniciar);
-            ActionListener iniciarSesion = (ActionEvent e) -> {
+    public void componentesInicioSesion() {
+//Panel
+        panelInicioSesion = new JPanel();
+        panelInicioSesion.setLayout(null);
+        this.getContentPane().add(panelInicioSesion);
+        this.setTitle("Inicio Sesion");
+//ETIQUETAS
+        JLabel lblUsuario = new JLabel("Ingrese su usuario");
+        lblUsuario.setBounds(50, 50, 150, 20);
+        panelInicioSesion.add(lblUsuario);
+        JLabel lblContra = new JLabel("Ingrese su Password");
+        lblContra.setBounds(50, 80, 150, 20);
+        panelInicioSesion.add(lblContra);
+//CUADROS DE TEXTO
+        txtUsuario = new JTextField();
+        txtUsuario.setBounds(180, 50, 150, 20);
+        panelInicioSesion.add(txtUsuario);
+        txtContra = new JPasswordField();
+        txtContra.setBounds(180, 80, 150, 20);
+        panelInicioSesion.add(txtContra);
+        JButton btnIniciar = new JButton("Log in");
+        btnIniciar.setBounds(50, 110, 150, 20);
+        panelInicioSesion.add(btnIniciar);
+        ActionListener InicioSesion = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 String usuario = txtUsuario.getText();
                 String contra = txtContra.getText();
-                if (buscarUsuario(usuario, contra)) {
+                if (BuscarUser(usuario, contra)) {
                     panelInicioSesion.setVisible(false);
                     componentesClientes();
                 }
-            };
-            btnIniciar.addActionListener(iniciarSesion);
-
-// -----------------> boton de Nuevo Usuario
-            JButton btnNuevoUsuario = new JButton("Sign in");//registrar
-            btnNuevoUsuario.setBounds(250, 150, 100, 30);
-            panelInicioSesion.add(btnNuevoUsuario);
-            ActionListener nuevoUsuario = (ActionEvent e) -> {
-                componentesNuevoUsuario();
+            }
+        };
+        btnIniciar.addActionListener(InicioSesion);
+//boton nuevo usuario
+        JButton btnNewUser = new JButton("Register");
+        btnNewUser.setBounds(50, 140, 150, 20);
+        panelInicioSesion.add(btnNewUser);
+        ActionListener newuser = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                componentesNewUser();
                 panelInicioSesion.setVisible(false);
-                panelNuevoUsuario.setVisible(true);
-                componentesNuevoUsuario();
-            };
-            btnNuevoUsuario.addActionListener(nuevoUsuario);
-            panelInicioSesion.repaint();
-        }
-        
-        public boolean buscarUsuario(String usuario, String contra) {
-            boolean encontrado = false;//se vuelve falso para cuando se encuentre cambie
-            String nombre = "";
+                componentesNewUser();
+            }
+        };
+        btnNewUser.addActionListener(newuser);
+        panelInicioSesion.repaint();
+    }
 
-            for (int i = 0; i <= misUsuarios.length - 1; i++) {
-
-                if (misUsuarios[i] != null) {//si es diferente a null
-
-                    if (misUsuarios[i].getNombre().equals(usuario) && misUsuarios[i].getcontra().equals(contra)) {
-
-                        encontrado = true;//si se encuentra se convierte en true
-
-                        nombre = misUsuarios[i].getNombre();
-
-                        break;
-
-                    }
-
+    public boolean BuscarUser(String usuario, String contra) {
+        boolean encontrado = false;
+        String nombre = "";
+        for (int i = 0; i <= misUsuarios.length - 1; i++) {
+            if (misUsuarios[i] != null) {
+                if (misUsuarios[i].getName().equals(usuario) && misUsuarios[i].getPass().equals(contra)) {
+                    encontrado = true;
+                    nombre = misUsuarios[i].getName();
+                    break;
                 }
-
             }
-
-            if (encontrado == true) { //si el valor es verdadero
-
-                JOptionPane.showMessageDialog(null, " WELCOME " + nombre + "!");
-
-            } else {
-
-                JOptionPane.showMessageDialog(null, " ¡INCORRECT DATA! ");
-
-            }
-
-            return encontrado;
-
         }
+        if (encontrado) {
+            JOptionPane.showMessageDialog(null, "Bienvenido");
+        } else {
+            JOptionPane.showMessageDialog(null, "Datos incorrectos");
+        }
+        return encontrado;
+    }
 
-        public void componentesNuevoUsuario() { // se crea el componente para registrar
-
-            panelNuevoUsuario = new JPanel();
-
-            panelNuevoUsuario.setLayout(null);
-
-            this.getContentPane().add(panelNuevoUsuario);
-
-            this.setTitle("Crear nueva cuenta");
-
-            JLabel newName = new JLabel("Enter username: ");
-
-            newName.setBounds(80, 25, 170, 20);
-
-            panelNuevoUsuario.add(newName);
-
-            JLabel newPass = new JLabel("Enter your password: ");
-
-            newPass.setBounds(80, 75, 150, 15);
-
-            panelNuevoUsuario.add(newPass);
-
-            JLabel confirmPass = new JLabel("Confirm your password: ");
-
-            confirmPass.setBounds(80, 125, 150, 15);
-
-            panelNuevoUsuario.add(confirmPass);
-
-//cuadros de texto para ingresar datos
-            JTextField txtname = new JTextField();
-
-            txtname.setBounds(250, 25, 150, 25);
-
-            panelNuevoUsuario.add(txtname);
-
-            JPasswordField txtPass = new JPasswordField();
-
-            txtPass.setBounds(250, 75, 150, 25);
-
-            panelNuevoUsuario.add(txtPass);
-
-            JPasswordField txtConfirmPass = new JPasswordField();
-
-            txtConfirmPass.setBounds(250, 125, 150, 25);
-
-            panelNuevoUsuario.add(txtConfirmPass);
-
-            JButton btnReturn = new JButton("Return");// boton de volver a Inicio
-
-            btnReturn.setBounds(80, 185, 100, 30);
-
-            panelNuevoUsuario.add(btnReturn);
-
-            ActionListener Return = (ActionEvent e) -> {
-
+    public void componentesNewUser() {
+//2do panel
+        panelNewUser = new JPanel();
+        panelNewUser.setLayout(null);
+        this.getContentPane().add(panelNewUser);
+        this.setTitle("New User");
+        JLabel NewNombre = new JLabel("Ingrese nombre de usuario");
+        NewNombre.setBounds(50, 50, 250, 20);
+        panelNewUser.add(NewNombre);
+        JLabel NewContra = new JLabel("Ingrese su contraseña de usuario");
+        NewContra.setBounds(50, 80, 250, 20);
+        panelNewUser.add(NewContra);
+//CUADROS DE TEXTO
+        JTextField txtUsuarioo = new JTextField();
+        txtUsuarioo.setBounds(250, 50, 150, 20);
+        panelNewUser.add(txtUsuarioo);
+        JTextField txtContraa = new JPasswordField();
+        txtContraa.setBounds(250, 80, 150, 20);
+        panelNewUser.add(txtContraa);
+//BOTONES
+        JButton btnGuardar = new JButton("Guardar");
+        btnGuardar.setBounds(50, 150, 150, 20);
+        panelNewUser.add(btnGuardar);
+        ActionListener guardar = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nombre = txtUsuarioo.getText();
+                String contra = txtContraa.getText();
+                SaveUser(nombre, contra);
+                txtUsuarioo.setText("");
+                txtContraa.setText("");
+            }
+        };
+        btnGuardar.addActionListener(guardar);
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(50, 180, 150, 20);
+        panelNewUser.add(btnVolver);
+        ActionListener volver = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 componentesInicioSesion();
-
-                panelInicioSesion.setVisible(true);
-
-                panelNuevoUsuario.setVisible(false);
-
-            };
-
-            btnReturn.addActionListener(Return);
-
-            JButton btnsave = new JButton("Save");// boton de volver a Inicio
-
-            btnsave.setBounds(200, 185, 100, 30);
-
-            panelNuevoUsuario.add(btnsave);
-
-            ActionListener Save = (ActionEvent e) -> {
-
-                String nombre = txtname.getText();
-
-                String contra = txtPass.getText();
-
-                if (guardarUsuario(nombre, contra)) {
-
-                    txtname.setText("");
-
-                    txtPass.setText("");
-
-                }
-
-            };
-
-            btnsave.addActionListener(Save);
-
-        }
-
-        public boolean guardarUsuario(String nombre, String contra) {
-
-            boolean guardado = false;
-
-            if (nombre.equals("") || contra.equals("")) {
-
-                JOptionPane.showMessageDialog(null, "You must fill out all fields");
-
-            } else {
-
-                if (comprobarDuplicadoUsuario(nombre)) {
-
-                    JOptionPane.showMessageDialog(null, "Existing user");
-
-                } else {
-
-                    boolean vacio = false;
-
-                    int posicion = -1;
-
-                    for (int i = 0; i <= misUsuarios.length - 1; i++) {
-
-                        if (misUsuarios[i] == null) {
-
-                            vacio = true;
-
-                            posicion = i;
-
-                            break;
-
-                        }
-
-                    }
-
-                    if (vacio) {
-
-                        misUsuarios[posicion] = new usuario(nombre, contra);
-
-                        JOptionPane.showMessageDialog(null, "Stored user 😊 !");
-
-                        guardado = true;
-
-                    } else {
-
-                        JOptionPane.showMessageDialog(null, "You can no longer save more users");
-
-                    }
-
-                }
-
+                panelNewUser.setVisible(false);
             }
+        };
+        btnVolver.addActionListener(volver);
+        panelNewUser.repaint();
+    }
 
-            return guardado;
-
-        }
-
-        public boolean comprobarDuplicadoUsuario(String nombre) {
-
-            boolean duplicado = false;
-
+    public void SaveUser(String nombre, String contra) {
+        if (nombre.equals("") || contra.equals("")) {
+            JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
+        } else {
+            boolean vacio = false;
+            int posicion = -1;
             for (int i = 0; i <= misUsuarios.length - 1; i++) {
-
                 if (misUsuarios[i] != null) {
-
-                    if (misUsuarios[i].getNombre().equals(nombre)) {
-
-                        duplicado = true;
-
-                        break;
-
-                    }
-
+                    vacio = true;
+                    posicion = i;
+                    break;
                 }
-
             }
-
-            return duplicado;
-
+            if (vacio) {
+                misUsuarios[posicion] = new usuario(nombre, contra);
+                JOptionPane.showMessageDialog(null, "Usuario guardado correctamente");
+            } else {
+                JOptionPane.showConfirmDialog(null, "El almacenamiento esta lleno");
+            }
         }
+    }
 
-//--------------------------- Componentes para mostrar los clientes------------
-        public void componentesClientes() {
-
-            panelClientes = new JPanel();
-
-            panelClientes.setLayout(null);
-
-            this.getContentPane().add(panelClientes);
-
-            this.setTitle("Dashboard by customers");//Customer control panel
-
-            JLabel lblClientes = new JLabel("Stored clients");//clientes almacenados
-
-            lblClientes.setBounds(10, 10, 150, 15);
-
-            panelClientes.add(lblClientes);
-
-            DefaultTableModel datos = new DefaultTableModel();//crear tabla con DefaultTableModel
-
-            datos.addColumn("Nit");
-
-            datos.addColumn("Nombre");
-
-            datos.addColumn("Edad");
-
-            datos.addColumn("Genéro");
-
-// ------------------------------------------> cliente de prueba
-            String prueba1[] = {"1", "Uno", "1", "F"};
-
-            datos.addRow(prueba1);
-
-            for (int i = 0; i < misClientes.length - 1; i++) {
-
-                if (misClientes[i] != null) {
-
-                    String temporal[] = {misClientes[i].getNit(), misClientes[i].getNombre(), String.valueOf(misClientes[i].getEdad()), String.valueOf(misClientes[i].getGenero())};
-
-                    datos.addRow(temporal);
-
+    public boolean comprobarDuplicadoUser(String nombre) {
+        boolean duplicado = false;
+        for (int i = 0; i <= 9; i++) {
+            if (misUsuarios[i] != null) {
+                if (misUsuarios[i].getName().equals(nombre)) {
+                    duplicado = true;
+                    break;
                 }
-
             }
+        }
+        return duplicado;
+    }
+//------------------------------componentes para mostrar clientes
 
-//creando la tabla de clientes
-            JTable tablaClientes = new JTable(datos);
+    public void componentesClientes() {
+        char M = 'M';
+        char F = 'F';
+        int ContadorM = 0;
+        int ContadorF = 0;
+//3er panel
+        panelClientes = new JPanel();
+        panelClientes.setLayout(null);
+        this.getContentPane().add(panelClientes);
+        this.setTitle("Dashboard de clientes");
+        //boton
+        
+        //tabla
+        JLabel lblClientes = new JLabel("Clientes almacenados");
+        lblClientes.setBounds(50, 50, 250, 30);
+        panelClientes.add(lblClientes);
+        DefaultTableModel datos = new DefaultTableModel();
+        datos.addColumn("NIT");
+        datos.addColumn("Nombre");
+        datos.addColumn("Edad");
+        datos.addColumn("Genero");
+        for (int i = 0; i <= misClientes.length - 1; i++) {
+            if (misClientes[i] != null) {
+                String temporal[] = {misClientes[i].getNit(), misClientes[i].getNombre(), String.valueOf(misClientes[i].getEdad()), String.valueOf(misClientes[i].getGenero())};
+                datos.addRow(temporal);
+            }
+        }
+        //contador para grafica
+        for (int i = 0; i <= misClientes.length - 1; i++) {
+            if (misClientes[i] != null) {
+                if (misClientes[i].getGenero()==(M)) {
+                    ContadorM=ContadorM+1;
+                } else if (misClientes[i].getGenero()==(F)) {
+                    ContadorF=ContadorF+1;
+                }
+            }
+        }
+//codigo
+        JTable tablaClientes = new JTable(datos);
+//Scroll para tabla
+        JScrollPane barraClientes = new JScrollPane(tablaClientes);
+        barraClientes.setBounds(50, 80, 450, 250);
+        panelClientes.add(barraClientes);
+        DefaultPieDataset generoGrafico = new DefaultPieDataset();
+        generoGrafico.setValue("Masculino", ContadorM);
+        generoGrafico.setValue("Femenino", ContadorF);
+        JFreeChart graficoCircular = ChartFactory.createPieChart("Generos", generoGrafico, true, true, false);
+        ChartPanel panelCircular = new ChartPanel(graficoCircular);
+        panelCircular.setBounds(500, 80, 300, 200);
+        panelClientes.add(panelCircular);
+        this.setSize(850, 400);
+        //Boton panel Nuevo Cliente
+        JButton btnNewClient = new JButton("Nuevo Cliente");
+        btnNewClient.setBounds(50, 20, 150, 20);
+        panelClientes.add(btnNewClient);
+        ActionListener nuevocl = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                componentesNuevoCliente();
+                panelClientes.setVisible(false);
+            }
+        };
+        btnNewClient.addActionListener(nuevocl);
+        //Boton regresar
+        JButton btnBack = new JButton("Volver");
+        btnBack.setBounds(240, 20, 150, 20);
+        panelClientes.add(btnBack);
+        ActionListener volver = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                componentesInicioSesion();
+                panelClientes.setVisible(false);
+            }
+        };
+        btnBack.addActionListener(volver);
+    }
+     public void componentesNuevoCliente() {
+        // 4th panel for adding a new client
+        JPanel panelNuevoCliente = new JPanel();
+        panelNuevoCliente.setLayout(null);
+        this.getContentPane().add(panelNuevoCliente);
+        this.setTitle("Nuevo Cliente");
 
-//Creando Scoll para tabla o barra de desplazamiento
-            JScrollPane barraClientes = new JScrollPane(tablaClientes);
+        JLabel lblNit = new JLabel("NIT del Cliente");
+        lblNit.setBounds(50, 50, 250, 20);
+        panelNuevoCliente.add(lblNit);
+        JLabel lblNombre = new JLabel("Nombre del Cliente");
+        lblNombre.setBounds(50, 80, 250, 20);
+        panelNuevoCliente.add(lblNombre);
+        JLabel lblEdad = new JLabel("Edad del Cliente");
+        lblEdad.setBounds(50, 110, 250, 20);
+        panelNuevoCliente.add(lblEdad);
+        JLabel lblGenero = new JLabel("Género del Cliente (M/F)");
+        lblGenero.setBounds(50, 140, 250, 20);
+        panelNuevoCliente.add(lblGenero);
 
-            barraClientes.setBounds(25, 40, 350, 250);
+        JTextField txtNit = new JTextField();
+        txtNit.setBounds(250, 50, 150, 20);
+        panelNuevoCliente.add(txtNit);
+        JTextField txtNombre = new JTextField();
+        txtNombre.setBounds(250, 80, 150, 20);
+        panelNuevoCliente.add(txtNombre);
+        JTextField txtEdad = new JTextField();
+        txtEdad.setBounds(250, 110, 150, 20);
+        panelNuevoCliente.add(txtEdad);
+        JTextField txtGenero = new JTextField();
+        txtGenero.setBounds(250, 140, 150, 20);
+        panelNuevoCliente.add(txtGenero);
 
-            panelClientes.add(barraClientes);
+        JButton btnSaveClient = new JButton("Guardar Cliente");
+        btnSaveClient.setBounds(50, 180, 150, 20);
+        panelNuevoCliente.add(btnSaveClient);
 
-            DefaultPieDataset generoGrafico = new DefaultPieDataset();
+        ActionListener saveClient = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nit = txtNit.getText();
+                String nombre = txtNombre.getText();
+                int edad = Integer.parseInt(txtEdad.getText());
+                char genero = txtGenero.getText().charAt(0);
 
-            generoGrafico.setValue("Masculino", 7);
+                SaveClient(nit, nombre, edad, genero);
+                txtNit.setText("");
+                txtNombre.setText("");
+                txtEdad.setText("");
+                txtGenero.setText("");
+            }
+        };
+        btnSaveClient.addActionListener(saveClient);
 
-            generoGrafico.setValue("Femenino", 10);
+        JButton btnRegresaar = new JButton("Volver a Clientes");
+        btnRegresaar.setBounds(50, 210, 150, 20);
+        panelNuevoCliente.add(btnRegresaar);
 
-            JFreeChart graficoCircular = ChartFactory.createPieChart("Generos", generoGrafico, true, true, false);
+        ActionListener backToClients = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelNuevoCliente.setVisible(false);
+                componentesClientes();
+            }
+        };
+        btnRegresaar.addActionListener(backToClients);
 
-            ChartPanel panelCircular = new ChartPanel(graficoCircular);
+        panelNuevoCliente.repaint();
+    }
 
-            this.setSize(850, 400);
-
-            panelCircular.setBounds(400, 20, 300, 250);
-
-            panelClientes.add(panelCircular);
-
+    public void SaveClient(String nit, String nombre, int edad, char genero) {
+        if (contadorClientes < misClientes.length) {
+            misClientes[contadorClientes] = new cliente(nit, nombre, edad, genero);
+            contadorClientes++;
+            JOptionPane.showMessageDialog(null, "Cliente guardado correctamente");
+        } else {
+            JOptionPane.showMessageDialog(null, "El almacenamiento de clientes está lleno.");
         }
     }
